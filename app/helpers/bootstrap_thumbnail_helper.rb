@@ -1,7 +1,7 @@
 module BootstrapThumbnailHelper
   
-  def thumbnail(image_options = {}, body_options = {})
-    media = Thumbnail.new(image_options, body_options)
+  def thumbnail(image_options = {}, body_options = {}, &block)
+    media = Thumbnail.new(image_options, body_options, &block)
     media.wrapper
   end
 
@@ -12,9 +12,10 @@ module BootstrapThumbnailHelper
     
     attr_accessor :image, :body
     
-    def initialize(image_options = {}, body_options = {})
+    def initialize(image_options = {}, body_options = {}, &block)
       @image = image_options
       @body = body_options
+      @block = block_given? ? capture(&block) : nil
     end
     
     # def lasjdñfls
@@ -62,6 +63,7 @@ module BootstrapThumbnailHelper
     end
   
     def caption_body
+      return @block if @block
       if @body[:content].present?
         html = ""
         if @body[:content].is_a?(String)

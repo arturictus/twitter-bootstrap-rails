@@ -1,6 +1,6 @@
 module BootstrapMediaHelper
-  def media_object(image_options = {}, body_options = {})
-    media = Media.new(image_options, body_options)
+  def media_object(image_options = {}, body_options = {}, &block)
+    media = Media.new(image_options, body_options, &block)
     media.wrapper
   end
 
@@ -11,9 +11,10 @@ module BootstrapMediaHelper
     
     attr_accessor :image, :body
     
-    def initialize(image_options = {}, body_options = {})
+    def initialize(image_options = {}, body_options = {}, &block)
       @image = image_options
       @body = body_options
+      @block = block_given? ? capture(&block) : nil 
     end
   
     def pull_left
@@ -31,7 +32,12 @@ module BootstrapMediaHelper
     end
   
     def media_body
-      content_tag(:div, raw(media_heading + media_content + media_content_link), :class => "media-body")
+      if @block
+        content = @block
+      else
+        content = raw(media_heading + media_content + media_content_link)
+      end
+      content_tag(:div, content , :class => "media-body")
     end
   
     def media_content
