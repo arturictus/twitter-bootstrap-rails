@@ -26,12 +26,12 @@ describe "panel" do
   end
   
   it "content can be as a parameter" do
-    output = panel(:class => "primary", :content => @content ) 
+    output = panel({:class => "primary"},{ :content => @content} ) 
     expected = "<div class=\"panel panel-primary\"><div class=\"panel-body\"><p>hello panel</p></div></div>"
     expect(output).to eq(expected)
   end
   it "content and block are accepted" do
-    output = panel(:class => "primary", :content => @content ) do
+    output = panel({:class => "primary"},{ :content => @content} ) do
       @content
     end
     expected = "<div class=\"panel panel-primary\"><div class=\"panel-body\"><p>hello panel</p><p>hello panel</p></div></div>"
@@ -39,10 +39,18 @@ describe "panel" do
   end
   
   it "title for the panel" do
-    output = panel(:class => "primary", :content => @content, :title => "my beautiful title" ) do
+    output = panel({:class => "primary"}, {:content => @content, :title => "my beautiful title"} ) do
       @content
     end
     expected = "<div class=\"panel panel-primary\"><div class=\"panel-heading\">my beautiful title</div><div class=\"panel-body\"><p>hello panel</p><p>hello panel</p></div></div>"
+    expect(output).to eq(expected)
+  end
+  
+  it "you can add options to the main wrapper" do
+    output = panel({:class => "primary", id: "my-panel"}, {:content => @content, :title => "my beautiful title"} ) do
+      @content
+    end
+    expected = "<div class=\"panel panel-primary\" id=\"my-panel\"><div class=\"panel-heading\">my beautiful title</div><div class=\"panel-body\"><p>hello panel</p><p>hello panel</p></div></div>"
     expect(output).to eq(expected)
   end
 end
