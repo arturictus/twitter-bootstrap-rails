@@ -8,7 +8,7 @@ include BootstrapMediaHelper
 
 describe BootstrapMediaHelper do
   before(:all) do
-    @image_hash = {:url =>"image_src"}
+    @image_hash = {:src =>"image_src"}
     @content_hash = {:heading => "title", 
                      :content => "<h1>content title</h1><p>content paragraph</p>", 
                      :link => [["show","/path"]]}
@@ -23,6 +23,14 @@ describe BootstrapMediaHelper do
       link_to "show", "#"
     end
     expected = "<div class=\"media\"><a class=\"pull-left\" href=\"#\"><img alt=\"Image src\" class=\"media-object\" src=\"/images/image_src\" /></a><div class=\"media-body\"><a href=\"#\">show</a></div></div>"
+    expect(output).to eq(expected)
+  end
+  it "a tag wrapping image" do
+    img_opt = @image_hash.merge(:href=> "/my/path")
+    output = media_object(img_opt) do
+      link_to "show", "#"
+    end
+    expected = "<div class=\"media\"><a class=\"pull-left\" href=\"/my/path\"><img alt=\"Image src\" class=\"media-object\" src=\"/images/image_src\" /></a><div class=\"media-body\"><a href=\"#\">show</a></div></div>"
     expect(output).to eq(expected)
   end
 end

@@ -19,8 +19,8 @@ module BootstrapMediaHelper
   
     def pull_left
       html = ""
-      if @image[:url].present?
-       html += link_to raw(media_object),"#",:class => "pull-left" 
+      if @image[:src].present?
+        html += link_to raw(media_object), href,:class => "pull-left" 
       elsif @image[:content].present?
         html += content_tag(:div, @image[:content], :class => "pull-left"  )
       end
@@ -28,7 +28,7 @@ module BootstrapMediaHelper
     end
   
     def media_object
-      image_tag(@image[:url], :class => "media-object")
+      image_tag(@image[:src], :class => "media-object")
     end
   
     def media_body
@@ -44,8 +44,6 @@ module BootstrapMediaHelper
       html = ""
       if @body[:content].present?
        html += content_tag(:p, @body[:content]) 
-      else
-       html+= ""
       end
       raw(html)
     end
@@ -57,7 +55,7 @@ module BootstrapMediaHelper
         if object[:link].is_a?(Array)
           object[:link].each_with_index do |l, i|
             if l.is_a?(Hash)
-              html += link_to(l[:label],l[:url], l[:html])
+              html += link_to(l[:label],l[:src], l[:html])
             else
               html += link_to(l[0], l[1], :class => (l[2] ? l[2] : (i == 0 ? "btn btn-primary" : "btn btn-default")))
             end
@@ -79,6 +77,12 @@ module BootstrapMediaHelper
   
     def wrapper
       content_tag(:div, raw(pull_left + media_body) , :class => "media") 
+    end
+    
+    private
+    
+    def href
+      @image.has_key?(:href) ? @image[:href] : "#"
     end
     
   end
